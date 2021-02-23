@@ -1,9 +1,9 @@
 import requests
 import json
-import random
 import ctypes
 import time
 from os import path
+from random import randint
 
 # unsplash api client_id and other configs
 client_id = 'YOUR UNSPLASH CLIENT ID HERE' #=> (api.unsplash.com)
@@ -16,9 +16,7 @@ time_interval = 3600
 
 # keep app alive
 while True:
-
     try:
-
         # get all wallpapers list
         data = requests.get(url)
         json_data = json.loads(data.text)
@@ -27,16 +25,15 @@ while True:
         pages = int(json_data['total_pages'])
 
         # select a random page
-        selected_page = random.randrange(1, pages)
+        selected_page = randint(1, pages)
         url += '&page=' + str(selected_page)
         data = requests.get(url)
         json_data = json.loads(data.text)
 
         # select a random wallpaper from selected page
         items = len(json_data['results'])
-        selected_item = random.randrange(1, items)
+        selected_item = randint(1, items)
         wallpaper_url = json_data['results'][selected_item]['urls']['full']
-
         # download and save selected wallpaper to documents
         download = requests.get(wallpaper_url)
         open(wallpaper_local_path, 'wb').write(download.content)
